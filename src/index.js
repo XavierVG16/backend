@@ -40,7 +40,7 @@ app.use(multer({ storage }).single("image"));
 
 
 // Routes
-app.use('/',require('./routes/auth.route'));
+app.use('/autenticar',require('./routes/auth.route'));
 app.use('/usuario',require('./routes/usuario.route'));
 app.use('/categoria',require('./routes/categorias.route'));
 app.use('/lector',require('./routes/lector.route'));

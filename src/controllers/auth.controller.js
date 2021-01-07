@@ -23,7 +23,9 @@ console.log(usuarioC)
 
 
             }
-            const token = jwt.sign({ id: user.id_usuario }, process.env.SECRET);
+            const token = jwt.sign({ id: user.id_usuario }, process.env.SECRET, {
+                expiresIn: 86400, // 24 hours
+              });
 
             res.status(200).send({
                 token: token
