@@ -16,7 +16,11 @@ app.set('port', process.env.PORT || 3000);
 
 // Middlewares
 
-app.use(cors({ origin: process.env.CROSS_HOST }));
+app.use(cors({ 
+  credentials: true,
+  origin: process.env.CROSS_HOST,
+  methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization' }));
 
 app.use(express.json());
 app.use(
