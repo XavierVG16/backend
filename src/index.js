@@ -18,11 +18,12 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(cors({ 
   credentials: true,
-  secure: true,
+  secure: false,
+  logLevel:"debug",
   changeOrigin: true,
   origin: process.env.CROSS_HOST,
-  methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization' }));
+
+}));
 
 app.use(express.json());
 app.use(
