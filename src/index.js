@@ -15,16 +15,18 @@ const { database } = require("./keys");
 app.set('port', process.env.PORT || 3000);
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Origin', process.env.CROSS_HOST);
 	res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
 	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-	res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 	next();
 });
 // Middlewares
 
 app.use(cors({ 
   origin: process.env.CROSS_HOST,
+
   optionsSuccessStatus: 200 , // For legacy browser support
   methods: "GET, POST, PUT, DELETE"
 
@@ -52,12 +54,12 @@ app.use(multer({ storage }).single("image"));
 
 
 // Routes
-app.use('api/autenticar',require('./routes/auth.route'));
-app.use('api/usuario',require('./routes/usuario.route'));
-app.use('api/categoria',require('./routes/categorias.route'));
-app.use('api/lector',require('./routes/lector.route'));
-app.use('api/libro',require('./routes/libro.route'));
-app.use('api/prestamo',require('./routes/prestamo.route'));
+app.use('/api/autenticar',require('./routes/auth.route'));
+app.use('/api/usuario',require('./routes/usuario.route'));
+app.use('/api/categoria',require('./routes/categorias.route'));
+app.use('/api/lector',require('./routes/lector.route'));
+app.use('/api/libro',require('./routes/libro.route'));
+app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
