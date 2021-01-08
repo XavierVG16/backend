@@ -16,10 +16,7 @@ app.set('port', process.env.PORT || 3000);
 
 // Middlewares
 
-app.use(cors({ 
-  origin: process.env.CROSS_HOST,
-
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(
@@ -50,12 +47,12 @@ app.use((req,res,next)=>{
 })
 
 // Routes
-app.use('/autenticar',require('./routes/auth.route'));
-app.use('/usuario',require('./routes/usuario.route'));
-app.use('/categoria',require('./routes/categorias.route'));
-app.use('/lector',require('./routes/lector.route'));
-app.use('/libro',require('./routes/libro.route'));
-app.use('/prestamo',require('./routes/prestamo.route'));
+app.use('api/autenticar',require('./routes/auth.route'));
+app.use('api/usuario',require('./routes/usuario.route'));
+app.use('api/categoria',require('./routes/categorias.route'));
+app.use('api/lector',require('./routes/lector.route'));
+app.use('api/libro',require('./routes/libro.route'));
+app.use('api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
