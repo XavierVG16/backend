@@ -17,10 +17,6 @@ app.set('port', process.env.PORT || 3000);
 // Middlewares
 
 app.use(cors({ 
-  credentials: true,
-  secure: false,
-  logLevel:"debug",
-  changeOrigin: true,
   origin: process.env.CROSS_HOST,
 
 }));
@@ -44,7 +40,14 @@ const storage = multer.diskStorage({
 });
 app.use(multer({ storage }).single("image"));
 
-
+app.use((req,res,next)=>{
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method,');
+  res.header('content-type: application/json; charset=utf-8')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  next()
+})
 
 // Routes
 app.use('/autenticar',require('./routes/auth.route'));
