@@ -15,7 +15,7 @@ const { database } = require("./keys");
 app.set('port', process.env.PORT || 3000);
 // Configurar cabeceras y cors
 router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', `${process.env.CROSS_HOST}`);
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   if (req.method === 'OPTIONS') {
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
