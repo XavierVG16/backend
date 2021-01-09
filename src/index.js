@@ -30,16 +30,15 @@ app.use((req, res, next) => {
 });
 // Middlewares
 
-/**
- * app.use(cors({ 
+
+  app.use(cors({ 
   origin: process.env.CROSS_HOST,
 
   optionsSuccessStatus: 200 , // For legacy browser support
   methods: "GET, POST, PUT, DELETE"
 
 }));
- */
-
+ 
 app.use(express.json());
 app.use(
   session({
