@@ -33,7 +33,9 @@ app.use((req, res, next) => {
 
   app.use(cors({ 
   origin: process.env.CROSS_HOST,
-
+  secure: false,
+  logLevel: "debug",
+  changeOrigin: true,
   optionsSuccessStatus: 200 , // For legacy browser support
   methods: "GET, POST, PUT, DELETE"
 
