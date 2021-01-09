@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+//const cors = require('cors');
 const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
@@ -13,7 +13,9 @@ const { database } = require("./keys");
 // Settings
 
 app.set('port', process.env.PORT || 3000);
-// Configurar cabeceras y cors
+/**
+ * 
+ * // Configurar cabeceras y cors
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', `${process.env.CROSS_HOST}`);
 
@@ -28,18 +30,11 @@ app.use((req, res, next) => {
       res.send();
   });
 });
+ */
 // Middlewares
+const cors = require('./cors')
 
-
-  app.use(cors({ 
-  origin: process.env.CROSS_HOST,
-  secure: false,
-  logLevel: "debug",
-  changeOrigin: true,
-  optionsSuccessStatus: 200 , // For legacy browser support
-  methods: "GET, POST, PUT, DELETE"
-
-}));
+  app.use(cors.permisos);
  
 app.use(express.json());
 app.use(
