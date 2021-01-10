@@ -1,5 +1,5 @@
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
@@ -32,9 +32,18 @@ app.use((req, res, next) => {
 });
  */
 // Middlewares
-const cors = require('./cors')
-
-  app.use(cors.permisos);
+var whitelist = ['http://localhost:4200', `${process.env.CROSS_HOST}`]
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+ 
+  app.use(cors(corsOptions));
  
 app.use(express.json());
 app.use(

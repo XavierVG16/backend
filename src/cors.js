@@ -16,4 +16,4 @@ function AllowCrossDomain(){
 
     }
 }
-module.exports = new AllowCrossDomain();
+module.exports = new AllowCrossDomain;
