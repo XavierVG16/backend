@@ -2,7 +2,7 @@ function AllowCrossDomain(){
     this.permisos = function (req, res, nex){
         var whileList = [
             'https://sistemabiblioteca-vl.herokuapp.com',
-            'http://localhost:4200/'
+            'http://localhost:4200'
 
         ];
         var origen = req.headers.origin;
