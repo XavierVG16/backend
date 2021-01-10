@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
  */
 // Middlewares
-var whitelist = ['http://localhost:4200', 'https://sistemabiblioteca-vl.herokuapp.com']
+var whitelist = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
