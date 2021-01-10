@@ -60,11 +60,15 @@ app.use(function (req, res, next){
   ];
   var origen = req.headers.origin;
   if(whileList.indexOf(origen)>= -1){
-      res.header('Access-Control-Allow-Origin', origen);
+      res.setHeader('Access-Control-Allow-Origin', origen);
 
   }
-  res.header('Access-Control-Allow-Header', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Header', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   next();
 
 })
