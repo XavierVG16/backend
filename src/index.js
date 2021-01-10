@@ -49,10 +49,11 @@ var corsOptions = {
     optionsSuccessStatus: 200,
     methods: ['GET', 'PUT', 'DELETE', 'POST']
   }));
- */
-// Middlewares
 
-app.use(function (req, res, next){
+
+
+
+  app.use(function (req, res, next){
   var whileList = [
       'https://sistemabiblioteca-vl.herokuapp.com',
       'http://localhost:4200'
@@ -72,6 +73,27 @@ app.use(function (req, res, next){
   next();
 
 })
+ */
+// Middlewares
+var cors_proxy = require('./lib/cors-anywhere');
+cors_proxy.createServer({
+    originBlacklist: [],
+    requireHeader: [],
+    removeHeaders: [
+        'cookie',
+        'cookie2',
+        // Strip Heroku-specific headers
+        'x-heroku-queue-wait-time',
+        'x-heroku-queue-depth',
+        'x-heroku-dynos-in-use',
+        'x-request-start'
+    ],
+    httpProxyOptions: {
+        // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
+        xfwd: false
+    }
+})
+
 
  
 app.use(express.json());
