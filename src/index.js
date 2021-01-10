@@ -12,7 +12,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-//app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -49,14 +49,14 @@ var corsOptions = {
     optionsSuccessStatus: 200,
     methods: ['GET', 'PUT', 'DELETE', 'POST']
   }));
+ */
+// Middlewares
 
-
-
-
-  app.use(function (req, res, next){
+app.use(function (req, res, next){
   var whileList = [
       'https://sistemabiblioteca-vl.herokuapp.com',
-      'http://localhost:4200'
+      'http://localhost:4200',
+      `${process.env.PORT}`
 
   ];
   var origen = req.headers.origin;
@@ -73,39 +73,6 @@ var corsOptions = {
   next();
 
 })
- */
-// Middlewares
-// Heroku defines the environment variable PORT, and requires the binding address to be 0.0.0.0
-var host = process.env.PORT ? '0.0.0.0' : '127.0.0.1';
-var port = process.env.PORT || 8080;
-
-// Grab the blacklist from the command-line so that we can update the blacklist without deploying
-// again. CORS Anywhere is open by design, and this blacklist is not used, except for countering
-// immediate abuse (e.g. denial of service). If you want to block all origins except for some,
-// use originWhitelist instead.
-var originBlacklist = (process.env.CORSANYWHERE_BLACKLIST || '').split(',');
-
-var cors_proxy = require('./lib/cors-anywhere');
-cors_proxy.createServer({
-    originBlacklist: [],
-    requireHeader: [],
-    removeHeaders: [
-        'cookie',
-        'cookie2',
-        // Strip Heroku-specific headers
-        'x-heroku-queue-wait-time',
-        'x-heroku-queue-depth',
-        'x-heroku-dynos-in-use',
-        'x-request-start'
-    ],
-    httpProxyOptions: {
-        // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
-        xfwd: false
-    }
-}).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
-
 
  
 app.use(express.json());
@@ -139,11 +106,7 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
-
-/**
- * 
- * app.listen(app.get('port'), () => {
+app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
- */
