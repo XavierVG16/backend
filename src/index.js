@@ -12,7 +12,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-//app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -49,47 +49,31 @@ var corsOptions = {
     optionsSuccessStatus: 200,
     methods: ['GET', 'PUT', 'DELETE', 'POST']
   }));
-
-    var whileList = [
-      'https://sistemabiblioteca-vl.herokuapp.com',
-      'http://localhost:4200',
-      `${process.env.PORT}`
-
-  ];
-
-  const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin) {
-            return callback(null, true);
-        }
-
-        if (whitelist.indexOf(origin) === -1) {
-            var msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    }
-}
-
-
  */
 // Middlewares
 
-var host = process.env.HOST || '0.0.0.0';
-// Listen on a specific port via the PORT environment variable
-var port = process.env.PORT || 8080;
+app.use(function (req, res, next){
+  var whileList = [
+      'https://sistemabiblioteca-vl.herokuapp.com',
+      'http://localhost:4200'
+
+  ];
+  var origen = req.headers.origin;
+  if(whileList.indexOf(origen)>= -1){
+      res.setHeader('Access-Control-Allow-Origin', origen);
+
+  }
+  res.setHeader('Access-Control-Allow-Header', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  next();
+
+})
+
  
-var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
-    originWhitelist: [], // Allow all origins
-    requireHeader: ['origin', 'x-requested-with'],
-    removeHeaders: ['cookie', 'cookie2']
-}).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
-
-
 app.use(express.json());
 app.use(
   session({
@@ -121,10 +105,7 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
-/**
- * app.listen(app.get('port'), () => {
+app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
- */
-
