@@ -12,7 +12,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-app.set('port', process.env.PORT || 3000);
+//app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -76,17 +76,18 @@ var corsOptions = {
  */
 // Middlewares
 
-var host = process.env.HOST;
+var host = process.env.HOST || '0.0.0.0';
 // Listen on a specific port via the PORT environment variable
-var port = process.env.PORT ;
+var port = process.env.PORT || 8080;
  
 var cors_proxy = require('cors-anywhere');
 cors_proxy.createServer({
     originWhitelist: [], // Allow all origins
     requireHeader: ['origin', 'x-requested-with'],
     removeHeaders: ['cookie', 'cookie2']
-})
-app.use(cors_proxy.createServer())
+}).listen(port, host, function() {
+    console.log('Running CORS Anywhere on ' + host + ':' + port);
+});
 
 
 app.use(express.json());
@@ -121,10 +122,9 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 // starting the server
 /**
- * 
- */
-
-app.listen(app.get('port'), () => {
+ * app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
+ */
+
