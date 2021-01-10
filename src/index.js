@@ -81,12 +81,12 @@ var host = process.env.HOST;
 var port = process.env.PORT ;
  
 var cors_proxy = require('cors-anywhere');
-
-app.use(cors_proxy.createServer({
-  originWhitelist: [], // Allow all origins
-  requireHeader: ['origin', 'x-requested-with'],
-  removeHeaders: ['cookie', 'cookie2']
-}))
+cors_proxy.createServer({
+    originWhitelist: [], // Allow all origins
+    requireHeader: ['origin', 'x-requested-with'],
+    removeHeaders: ['cookie', 'cookie2']
+})
+app.use(cors_proxy.createServer())
 
 
 app.use(express.json());
