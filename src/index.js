@@ -12,7 +12,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-app.set('port', process.env.PORT || 3000);
+//app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -139,7 +139,11 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
-app.listen(app.get('port'), () => {
+
+/**
+ * 
+ * app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
+ */
