@@ -30,9 +30,8 @@ app.use((req, res, next) => {
       res.send();
   });
 });
-
-
-
+ */
+// Middlewares
 var whitelist = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com']
 var corsOptions = {
   origin: function (origin, callback) {
@@ -48,24 +47,6 @@ var corsOptions = {
   app.use(cors(corsOptions,{
     optionsSuccessStatus: 200
   }));
- */
-// Middlewares
-this.permisos = function (req, res, nex){
-  var whileList = [
-      'https://sistemabiblioteca-vl.herokuapp.com',
-      'http://localhost:4200/'
-
-  ];
-  var origen = req.headers.origin;
-  if(whileList.indexOf(origen)>= -1){
-      res.header('Access-Control-Allow-Origin', origen);
-
-  }
-  res.header('Access-Control-Allow-Header', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-  next();
-
-}
  
 app.use(express.json());
 app.use(
