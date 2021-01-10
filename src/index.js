@@ -76,18 +76,17 @@ var corsOptions = {
  */
 // Middlewares
 
-var host = process.env.HOST || '0.0.0.0';
+var host = process.env.HOST;
 // Listen on a specific port via the PORT environment variable
-var port = process.env.PORT || 8080;
+var port = process.env.PORT ;
  
 var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
-    originWhitelist: [], // Allow all origins
-    requireHeader: ['origin', 'x-requested-with'],
-    removeHeaders: ['cookie', 'cookie2']
-}).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
+
+app.use(cors_proxy.createServer({
+  originWhitelist: [], // Allow all origins
+  requireHeader: ['origin', 'x-requested-with'],
+  removeHeaders: ['cookie', 'cookie2']
+}))
 
 
 app.use(express.json());
@@ -122,8 +121,10 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 // starting the server
 /**
- * app.listen(app.get('port'), () => {
+ * 
+ */
+
+app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
- */
