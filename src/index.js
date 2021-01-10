@@ -49,30 +49,52 @@ var corsOptions = {
     optionsSuccessStatus: 200,
     methods: ['GET', 'PUT', 'DELETE', 'POST']
   }));
- */
-// Middlewares
 
-app.use(function (req, res, next){
-  var whileList = [
+    var whileList = [
       'https://sistemabiblioteca-vl.herokuapp.com',
       'http://localhost:4200',
       `${process.env.PORT}`
 
   ];
-  var origen = req.headers.origin;
-  if(whileList.indexOf(origen)>= -1){
-      res.setHeader('Access-Control-Allow-Origin', origen);
 
-  }
-  res.setHeader('Access-Control-Allow-Header', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
 
-  res.setHeader('Access-Control-Allow-Credentials', true);
+        if (whitelist.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}
+ */
+// Middlewares
 
-  next();
+const whitelist = ['https://sistemabiblioteca-vl.herokuapp.com',
+'http://localhost:4200',
+`${process.env.PORT}`]; // list of allow domain
 
-})
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        if (whitelist.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}
+
+// end 
+app.use(cors(corsOptions));
 
  
 app.use(express.json());
