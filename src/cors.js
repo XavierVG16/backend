@@ -5,7 +5,7 @@ function AllowCrossDomain(){
             'http://localhost:4200'
 
         ];
-        var origen = req.header.origen;
+        var origen = req.headers.origin;
         if(whileList.indexOf(origen)>= -1){
             res.header('Access-Control-Allow-Origin', origen);
 
