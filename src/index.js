@@ -72,7 +72,8 @@ var corsOptions = {
 }
  
 app. use(cors({origin: process.env.CROSS_HOST,
-  reflightContinue: true
+  reflightContinue: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
  }));
 
 
