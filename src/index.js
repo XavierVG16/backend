@@ -73,8 +73,9 @@ var corsOptions = {
  
 app. use(cors({origin: process.env.CROSS_HOST,
   origin: true,
-  reflightContinue: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true,
+  allowedHeaders:['Content-Type', 'application/json'],
+  maxAge: 3600
  }));
 
 
