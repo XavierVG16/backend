@@ -72,10 +72,10 @@ var corsOptions = {
 }
  
 app. use(cors({origin: process.env.CROSS_HOST,
-  origin: true,
-  credentials: true,
-  allowedHeaders:['Content-Type', 'application/json'],
-  maxAge: 3600
+'sec-fetch-site': 'same-site',
+'sec-fetch-mode': 'cors',
+'sec-fetch-dest': 'empty',
+
  }));
 
 
