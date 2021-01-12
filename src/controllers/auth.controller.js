@@ -4,7 +4,7 @@ const helpers = require("../lib/helper");
 const authCtrl = {};
 authCtrl.signin = async (req, res, next) => {
     const { email, pass_usuario } = req.body
-console.log(req.headers)
+
     try {
         const usuarioC = await pool.query('select * from usuarios where email = ?', email)
 console.log(usuarioC)
