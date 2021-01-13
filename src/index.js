@@ -4,7 +4,8 @@ const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
-
+const { createProxyMiddleware } = require('http-proxy-middleware');
+ 
 const app = express();
 require("dotenv").config();
 
@@ -12,7 +13,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-app.set('port', process.env.PORT || 3000);
+//app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -56,8 +57,7 @@ app.use(function (req, res, next){
   next();
 
 })
- */
-// Middlewares
+
 
 var whitelist = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com']
 var corsOptions = {
@@ -71,13 +71,66 @@ var corsOptions = {
   }
 }
  
-app. use(cors({origin: process.env.CROSS_HOST,
-  allowedHeaders: ['Content-Type', '	application/json; charset=utf-8']
 
- }));
+ */
+// Middlewares
 
+conf = {
+  // look for PORT environment variable,
+  // else look for CLI argument,
+  // else use hard coded value for port 8080
+  port: process.env.PORT || process.argv[2] || 3000,
 
- 
+  // origin undefined handler
+  // see https://github.com/expressjs/cors/issues/71
+  originUndefined: function (req, res, next) {
+
+      if (!req.headers.origin) {
+
+          res.json({
+
+              mess: 'Hi you are visiting the service locally. If this was a CORS the origin header should not be undefined'
+
+          });
+
+      } else {
+
+          next();
+
+      }
+
+  },
+
+  // Cross Origin Resource Sharing Options
+  cors: {
+
+      // origin handler
+      origin: function (origin, cb) {
+
+          // setup a white list
+          let wl = [`${process.env.CROSS_HOST}`];
+
+          if (wl.indexOf(origin) != -1) {
+
+              cb(null, true);
+
+          } else {
+
+              cb(new Error('invalid origin: ' + origin), false);
+
+          }
+
+      },
+
+      optionsSuccessStatus: 200
+
+  }
+
+};
+
+// use origin undefined handler, then cors for all paths
+app.use(conf.originUndefined, cors(conf.cors));
+
 app.use(express.json());
 app.use(
   session({
@@ -98,9 +151,10 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
+app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
-app.use('/api/autenticar',require('./routes/auth.route'));
+//app.use('/api/autenticar',require('./routes/auth.route'));
 app.use('/api/usuario',require('./routes/usuario.route'));
 app.use('/api/categoria',require('./routes/categorias.route'));
 app.use('/api/lector',require('./routes/lector.route'));
@@ -109,7 +163,7 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
-app.listen(app.get('port'), () => {
-  console.log(`server on port ${app.get('port')}`);
+app.listen(conf.port, () => {
+  console.log(`server on port ${conf.port}`);
   console.log("environment:", process.env.NODE_ENV);
 });
