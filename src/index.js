@@ -82,36 +82,20 @@ conf = {
 
   // origin undefined handler
   // see https://github.com/expressjs/cors/issues/71
-  originUndefined: function (req, res, next) {
-
-      if (!req.headers.origin) {
-
-          res.json({
-
-              mess: 'Hi you are visiting the service locally. If this was a CORS the origin header should not be undefined'
-
-          });
-
-      } else {
-
-          next();
-
-      }
-
-  },
 
   // Cross Origin Resource Sharing Options
-  cors: {
+  Origincors: {
 
       // origin handler
       origin: function (origin, cb) {
 
           // setup a white list
-          let wl = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com'];
+          let wl = ['http://localhost:4200', '*','http://localhost:3000', 'https://sistemabiblioteca-vl.herokuapp.com'];
 
           if (wl.indexOf(origin) != -1) {
 
               cb(null, true);
+              console.log('cors orgin',origin)
 
           } else {
 
@@ -128,7 +112,7 @@ conf = {
 };
 
 // use origin undefined handler, then cors for all paths
-app.use(conf.originUndefined, cors(conf.cors));
+app.use(cors(conf.Origincors));
 
 app.use(express.json());
 app.use(
@@ -150,19 +134,20 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
-app.use('/api/autenticar',require('./routes/auth.route'));
+app.use('/api/autenticar',require('./routes/auth.route'),cors(conf.Origincors));
 
 // Routes
-//app.use('/api/autenticar',require('./routes/auth.route'));
-app.use('/api/usuario',require('./routes/usuario.route'));
-app.use('/api/categoria',require('./routes/categorias.route'));
-app.use('/api/lector',require('./routes/lector.route'));
-app.use('/api/libro',require('./routes/libro.route'));
-app.use('/api/prestamo',require('./routes/prestamo.route'));
+
+app.use('/api/usuario',require('./routes/usuario.route'),cors(conf.Origincors));
+app.use('/api/categoria',require('./routes/categorias.route'),cors(conf.Origincors));
+app.use('/api/lector',require('./routes/lector.route'),cors(conf.Origincors));
+app.use('/api/libro',require('./routes/libro.route'),cors(conf.Origincors));
+app.use('/api/prestamo',require('./routes/prestamo.route'),cors(conf.Origincors));
 
 
 // starting the server
 app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
+  console.log('cors ',cors( conf.Origincors))
 });
