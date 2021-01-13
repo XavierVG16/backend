@@ -4,7 +4,6 @@ const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
-const { createProxyMiddleware } = require('http-proxy-middleware');
  
 const app = express();
 require("dotenv").config();
@@ -13,7 +12,7 @@ require('./database');
 const { database } = require("./keys");
 // Settings
 
-//app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 /**
  * 
  * // Configurar cabeceras y cors
@@ -79,7 +78,7 @@ conf = {
   // look for PORT environment variable,
   // else look for CLI argument,
   // else use hard coded value for port 8080
-  port: process.env.PORT  || 3000,
+ // port: process.env.PORT || process.argv[2] || 8080,
 
   // origin undefined handler
   // see https://github.com/expressjs/cors/issues/71
@@ -108,7 +107,7 @@ conf = {
       origin: function (origin, cb) {
 
           // setup a white list
-          let wl = [`${process.env.CROSS_HOST}`];
+          let wl = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com'];
 
           if (wl.indexOf(origin) != -1) {
 
@@ -163,7 +162,7 @@ app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
-app.listen(conf.port, () => {
-  console.log(`server on port ${conf.port}`);
+app.listen(app.get('port'), () => {
+  console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
