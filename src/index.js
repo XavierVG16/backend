@@ -74,46 +74,12 @@ var corsOptions = {
  */
 // Middlewares
 
-conf = {
-  // look for PORT environment variable,
-  // else look for CLI argument,
-  // else use hard coded value for port 8080
- // port: process.env.PORT || process.argv[2] || 8080,
-
-  // origin undefined handler
-  // see https://github.com/expressjs/cors/issues/71
-
-  // Cross Origin Resource Sharing Options
-  Origincors: {
-
-      // origin handler
-      origin: function (origin, cb) {
-
-          // setup a white list
-          let wl = ['http://localhost:4200', '*','http://localhost:3000', 'https://sistemabiblioteca-vl.herokuapp.com'];
-
-          if (wl.indexOf(origin) != -1) {
-
-              cb(null, true);
-              console.log('cors orgin',origin)
-
-          } else {
-
-              cb(new Error('invalid origin: ' + origin), false);
-
-          }
-
-      },
-
-      optionsSuccessStatus: 200
-
-  }
-
-};
-
-// use origin undefined handler, then cors for all paths
-app.use(cors(conf.Origincors));
-
+app.use(function(request, response, next) {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+ 
 app.use(express.json());
 app.use(
   session({
@@ -134,20 +100,25 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
-app.use('/api/autenticar',require('./routes/auth.route'),cors(conf.Origincors));
+app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
+app.get('/', function (req, res, next) {
 
-app.use('/api/usuario',require('./routes/usuario.route'),cors(conf.Origincors));
-app.use('/api/categoria',require('./routes/categorias.route'),cors(conf.Origincors));
-app.use('/api/lector',require('./routes/lector.route'),cors(conf.Origincors));
-app.use('/api/libro',require('./routes/libro.route'),cors(conf.Origincors));
-app.use('/api/prestamo',require('./routes/prestamo.route'),cors(conf.Origincors));
+  res.json({
+      mess: 'hello it looks like you are on the whitelist'
+  });
+
+});
+app.use('/api/usuario',require('./routes/usuario.route'));
+app.use('/api/categoria',require('./routes/categorias.route'));
+app.use('/api/lector',require('./routes/lector.route'));
+app.use('/api/libro',require('./routes/libro.route'));
+app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
 app.listen(app.get('port'), () => {
   console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
-  console.log('cors ',cors( conf.Origincors))
 });
