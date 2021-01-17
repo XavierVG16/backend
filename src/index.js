@@ -99,10 +99,14 @@ cors_proxy.createServer({
     'via',
     'connect-time',
     'total-route-time',
+    'x-heroku-queue-wait-time',
+    'x-heroku-queue-depth',
+    'x-heroku-dynos-in-use',
+    'x-request-start',
     // Other Heroku added debug headers
-    // 'x-forwarded-for',
-    // 'x-forwarded-proto',
-    // 'x-forwarded-port',
+    'x-forwarded-for',
+     'x-forwarded-proto',
+     'x-forwarded-port',
   ],
   redirectSameOrigin: true,
   httpProxyOptions: {
@@ -133,7 +137,7 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
-app.use('/api/autenticar',require('./routes/auth.route'));
+app.use('/api/autenticar',require('./routes/auth.route'), cors_proxy.createServer);
 
 // Routes
 app.get('/', function (req, res, next) {
@@ -143,11 +147,11 @@ app.get('/', function (req, res, next) {
   });
 
 });
-app.use('/api/usuario',require('./routes/usuario.route'));
-app.use('/api/categoria',require('./routes/categorias.route'));
-app.use('/api/lector',require('./routes/lector.route'));
-app.use('/api/libro',require('./routes/libro.route'));
-app.use('/api/prestamo',require('./routes/prestamo.route'));
+app.use('/api/usuario',require('./routes/usuario.route'),cors_proxy.createServer);
+app.use('/api/categoria',require('./routes/categorias.route'),cors_proxy.createServer);
+app.use('/api/lector',require('./routes/lector.route'),cors_proxy.createServer);
+app.use('/api/libro',require('./routes/libro.route'),cors_proxy.createServer);
+app.use('/api/prestamo',require('./routes/prestamo.route'),cors_proxy.createServer);
 
 
 // starting the server
