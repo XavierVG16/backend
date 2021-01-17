@@ -88,25 +88,20 @@ var corsOptions = {
 }
 cors_proxy.createServer({
   originWhitelist:[process.env.PORT ,process.env.CROSS_HOST],
-  checkRateLimit: checkRateLimit,
   requireHeader: ['origin', 'x-requested-with'],
   removeHeaders: [
     'cookie',
     'cookie2',
     // Strip Heroku-specific headers
-    'x-request-start',
-    'x-request-id',
-    'via',
-    'connect-time',
-    'total-route-time',
+    
     'x-heroku-queue-wait-time',
     'x-heroku-queue-depth',
     'x-heroku-dynos-in-use',
     'x-request-start',
     // Other Heroku added debug headers
-    'x-forwarded-for',
-     'x-forwarded-proto',
-     'x-forwarded-port',
+    //'x-forwarded-for',
+     //'x-forwarded-proto',
+     //'x-forwarded-port',
   ],
   redirectSameOrigin: true,
   httpProxyOptions: {
