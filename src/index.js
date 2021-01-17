@@ -4,16 +4,14 @@ const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
-var cors_proxy = require('./lib/cors-anywhere');
-var checkRateLimit = require('./lib/rate-limit')('300');
-
+ 
 const app = express();
 require("dotenv").config();
 
 require('./database');
 const { database } = require("./keys");
 // Settings
-app.set ('host',process.env.HOST || '0.0.0.0') 
+
 app.set('port', process.env.PORT || 3000);
 /**
  * 
@@ -75,7 +73,7 @@ var corsOptions = {
 
  */
 // Middlewares
-var whitelist = [process.env.PORT ,'http://localhost:4202']
+var whitelist = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -86,30 +84,7 @@ var corsOptions = {
     }
   }
 }
-cors_proxy.createServer({
-  originWhitelist:[process.env.PORT ,process.env.CROSS_HOST],
-  requireHeader: ['origin', 'x-requested-with'],
-  removeHeaders: [
-    'cookie',
-    'cookie2',
-    // Strip Heroku-specific headers
-    
-    'x-heroku-queue-wait-time',
-    'x-heroku-queue-depth',
-    'x-heroku-dynos-in-use',
-    'x-request-start',
-    // Other Heroku added debug headers
-    //'x-forwarded-for',
-     //'x-forwarded-proto',
-     //'x-forwarded-port',
-  ],
-  redirectSameOrigin: true,
-  httpProxyOptions: {
-    // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
-    xfwd: false,
-  },
-})
-//app.use()
+app.use(cors(corsOptions))
 
  
 app.use(express.json());
@@ -132,7 +107,7 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
-app.use('/api/autenticar',require('./routes/auth.route'), cors_proxy.createServer);
+app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
 app.get('/', function (req, res, next) {
@@ -142,16 +117,16 @@ app.get('/', function (req, res, next) {
   });
 
 });
-app.use('/api/usuario',require('./routes/usuario.route'),cors_proxy.createServer);
-app.use('/api/categoria',require('./routes/categorias.route'),cors_proxy.createServer);
-app.use('/api/lector',require('./routes/lector.route'),cors_proxy.createServer);
-app.use('/api/libro',require('./routes/libro.route'),cors_proxy.createServer);
-app.use('/api/prestamo',require('./routes/prestamo.route'),cors_proxy.createServer);
+app.use('/api/usuario',require('./routes/usuario.route'));
+app.use('/api/categoria',require('./routes/categorias.route'));
+app.use('/api/lector',require('./routes/lector.route'));
+app.use('/api/libro',require('./routes/libro.route'));
+app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
 
-  app.listen(app.get('port'),  app.get('host'),() => {
-  console.log(`server on port ${app.get('port')} host ${app.get('host')}` );
+  app.listen(app.get('port'), () => {
+  console.log(`server on port ${app.get('port')}`);
   console.log("environment:", process.env.NODE_ENV);
 });
