@@ -73,7 +73,7 @@ var corsOptions = {
 
  */
 // Middlewares
-var whitelist = ['http://localhost:4200', 'http://localhost:4202', 'https://sistemabiblioteca-vl.herokuapp.com']
+var whitelist = ['http://localhost:4200',process.env.PORT ,'http://localhost:4202', process.env.CROSS_HOST]
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
