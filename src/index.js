@@ -133,7 +133,7 @@ const storage = multer.diskStorage({
 app.use(multer({ storage }).single("image"));
 
 
-app.use('/api/autenticar',require('./routes/auth.route'),cors(corsOptions));
+app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
 app.get('/', function (req, res, next) {
@@ -143,11 +143,11 @@ app.get('/', function (req, res, next) {
   });
 
 });
-app.use('/api/usuario',require('./routes/usuario.route'),cors(corsOptions));
-app.use('/api/categoria',require('./routes/categorias.route'),cors(corsOptions));
-app.use('/api/lector',require('./routes/lector.route'),cors(corsOptions));
-app.use('/api/libro',require('./routes/libro.route'),cors(corsOptions));
-app.use('/api/prestamo',require('./routes/prestamo.route'),cors(corsOptions));
+app.use('/api/usuario',require('./routes/usuario.route'));
+app.use('/api/categoria',require('./routes/categorias.route'));
+app.use('/api/lector',require('./routes/lector.route'));
+app.use('/api/libro',require('./routes/libro.route'));
+app.use('/api/prestamo',require('./routes/prestamo.route'));
 
 
 // starting the server
