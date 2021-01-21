@@ -107,6 +107,7 @@ const storage = multer.diskStorage({
 });
 app.use(multer({ storage }).single("image"));
  
+app.use(express.static(path.join(__dirname,'bin')));
 
 
 
@@ -120,23 +121,21 @@ app.get('/' ,function (req, res, next) {
   });
 
 });
+
+
 app.use('/api/usuario',require('./routes/usuario.route'));
 app.use('/api/categoria',require('./routes/categorias.route'));
 app.use('/api/lector',require('./routes/lector.route'));
 app.use('/api/libro',require('./routes/libro.route'));
 app.use('/api/prestamo',require('./routes/prestamo.route'));
-// Authorization: Bearer <token>
-function verifyToken(req, res, next){
-  const bearerHeader =  req.headers['authorization'];
 
-  if(typeof bearerHeader !== 'undefined'){
-       const bearerToken = bearerHeader.split(" ")[1];
-       req.token  = bearerToken;
-       next();
-  }else{
-      res.sendStatus(403);
-  }
-}
+
+
+app.get('*' ,function (req, res, next) {
+
+  res.sendFile(path.join(__dirname,'bin/index.html'))
+
+});
 
 // starting the server
 
