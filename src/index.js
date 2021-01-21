@@ -87,7 +87,8 @@ var corsOptions = {
 app.use(cors())
 
  
-app.use(express.json());
+app.use(express.urlencoded({extended: false})); // aceptar el tipo de formato
+app.use(express.json()); // enviar y recivir json
 app.use(
   session({
     secret: "xavier",
@@ -105,12 +106,14 @@ const storage = multer.diskStorage({
   },
 });
 app.use(multer({ storage }).single("image"));
+ 
+
 
 
 app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
-app.get('/', function (req, res, next) {
+app.get('/' ,function (req, res, next) {
 
   res.json({
       mess: 'hello it looks like you are on the whitelist'
@@ -122,7 +125,18 @@ app.use('/api/categoria',require('./routes/categorias.route'));
 app.use('/api/lector',require('./routes/lector.route'));
 app.use('/api/libro',require('./routes/libro.route'));
 app.use('/api/prestamo',require('./routes/prestamo.route'));
+// Authorization: Bearer <token>
+function verifyToken(req, res, next){
+  const bearerHeader =  req.headers['authorization'];
 
+  if(typeof bearerHeader !== 'undefined'){
+       const bearerToken = bearerHeader.split(" ")[1];
+       req.token  = bearerToken;
+       next();
+  }else{
+      res.sendStatus(403);
+  }
+}
 
 // starting the server
 
