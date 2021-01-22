@@ -4,7 +4,8 @@ const MysQlStore = require("express-mysql-session");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
- 
+const bodyParser = require('body-parser');
+
 const app = express();
 require("dotenv").config();
 
@@ -86,8 +87,9 @@ var corsOptions = {
 }
 app.use(cors())
 
- 
-app.use(express.urlencoded({extended: false})); // aceptar el tipo de formato
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded());
+ // aceptar el tipo de formato
 app.use(express.json()); // enviar y recivir json
 app.use(
   session({
@@ -111,7 +113,6 @@ app.use(express.static(path.join(__dirname,'bin')));
 
 
 
-app.use('/api/autenticar',require('./routes/auth.route'));
 
 // Routes
 app.get('/' ,function (req, res, next) {
@@ -122,6 +123,7 @@ app.get('/' ,function (req, res, next) {
 
 });
 
+app.use('/api/autenticar',require('./routes/auth.route'));
 
 app.use('/api/usuario',require('./routes/usuario.route'));
 app.use('/api/categoria',require('./routes/categorias.route'));
