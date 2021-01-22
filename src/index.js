@@ -85,12 +85,12 @@ var corsOptions = {
     }
   }
 }
-app.use(cors())
-
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.urlencoded());
- // aceptar el tipo de formato
+//app.use(cors())
 app.use(express.json()); // enviar y recivir json
+
+app.use(express.urlencoded({extended: true})); // aceptar el tipo de formato
+//app.use(express.urlencoded());
+ // aceptar el tipo de formato
 app.use(
   session({
     secret: "xavier",
