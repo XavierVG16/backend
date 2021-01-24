@@ -4,8 +4,6 @@ const helpers = require("../lib/helper");
 const authCtrl = {};
 authCtrl.signin = async (req, res, next) => {
     const { email, pass_usuario } = req.body
-
-    try {
         const usuarioC = await pool.query('select * from usuarios where email = ?', email)
 console.log(usuarioC)
         if (usuarioC.length == 0) {
@@ -32,9 +30,7 @@ console.log(usuarioC)
             });
 
         }
-    } catch (error) {
-        console.log(error);
-    }
+  
 
 
 }

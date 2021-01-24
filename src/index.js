@@ -86,20 +86,12 @@ var corsOptions = {
   }
 }
 //app.use(cors())
-app.use(express.json()); // enviar y recivir json
 
 app.use(express.urlencoded({extended: true})); // aceptar el tipo de formato
 //app.use(express.urlencoded());
  // aceptar el tipo de formato
-app.use(
-  session({
-    secret: "xavier",
-    resave: false,
-    saveUninitialized: false,
-    store: new MysQlStore(database),
-    cookie: { secure: true }
-  })
-);
+app.use(express.json()); // enviar y recivir json
+
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "public/img/uploads"),

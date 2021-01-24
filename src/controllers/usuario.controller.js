@@ -16,21 +16,15 @@ usuarioCtrl.createUsuario = async (req, res, next) => {
     nombres, apellidos, email, ci,pass_usuario, t_usuario, telefono
   };
 
-  const lista = await pool.query('select * from usuarios  WHERE ci = ?', ci);
-  if(lista.leigth){
+ 
     newUsuario.pass_usuario = await helpers.encryptPassword(pass_usuario);
 
     const user = await pool.query('insert into usuarios  set ?', newUsuario);
-    console.log(user)
     const token = jwt.sign({ id: user.insertId }, process.env.SECRET);
   
-    res.status(200).send({
-      token: token
-    });
-  }else{
-    res.status(500).json( {message:'el Usuario ya existe!'});
+    res.status(200).send({token: token});
 
-  }
+ 
  
 };
 usuarioCtrl.getUsuario = async (req, res, next) => {
